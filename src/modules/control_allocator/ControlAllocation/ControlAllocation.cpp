@@ -71,10 +71,11 @@ ControlAllocation::setActuatorSetpoint(
 	// Compute achieved control
 	_control_allocated = _effectiveness * _actuator_sp;
 
+	updateSaturationStatus();
 }
 
 void
-ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation::NUM_ACTUATORS> &actuator) const
+ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation::NUM_ACTUATORS> &actuator)
 {
 	for (int i = 0; i < _num_actuators; i++) {
 		if (_actuator_max(i) < _actuator_min(i)) {
@@ -82,11 +83,33 @@ ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation:
 
 		} else if (actuator(i) < _actuator_min(i)) {
 			actuator(i) = _actuator_min(i);
+			_saturation_status.flags.act_neg = true;
 
 		} else if (actuator(i) > _actuator_max(i)) {
 			actuator(i) = _actuator_max(i);
+			_saturation_status.flags.act_pos = true;
 		}
 	}
+}
+
+void
+ControlAllocation::updateSaturationStatus()
+{
+	const float tolerance = FLT_EPSILON;
+
+	_saturation_status.flags.valid = true;
+	_saturation_status.flags.roll_pos = _control_sp(0) > (_control_allocated(0) + tolerance);
+	_saturation_status.flags.roll_neg = _control_sp(0) < (_control_allocated(0) - tolerance);
+	_saturation_status.flags.pitch_pos = _control_sp(1) > (_control_allocated(1) + tolerance);
+	_saturation_status.flags.pitch_neg = _control_sp(1) < (_control_allocated(1) - tolerance);
+	_saturation_status.flags.yaw_pos = _control_sp(2) > (_control_allocated(2) + tolerance);
+	_saturation_status.flags.yaw_neg = _control_sp(2) < (_control_allocated(2) - tolerance);
+	_saturation_status.flags.thrust_x_pos = _control_sp(3) > (_control_allocated(3) + tolerance);
+	_saturation_status.flags.thrust_x_neg = _control_sp(3) < (_control_allocated(3) - tolerance);
+	_saturation_status.flags.thrust_y_pos = _control_sp(4) > (_control_allocated(4) + tolerance);
+	_saturation_status.flags.thrust_y_pos = _control_sp(4) > (_control_allocated(4) + tolerance);
+	_saturation_status.flags.thrust_z_neg = _control_sp(5) < (_control_allocated(5) - tolerance);
+	_saturation_status.flags.thrust_z_neg = _control_sp(5) < (_control_allocated(5) - tolerance);
 }
 
 matrix::Vector<float, ControlAllocation::NUM_ACTUATORS>

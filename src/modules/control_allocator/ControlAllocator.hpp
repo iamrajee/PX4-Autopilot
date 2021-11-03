@@ -60,10 +60,12 @@
 #include <uORB/Subscription.hpp>
 #include <uORB/SubscriptionCallback.hpp>
 #include <uORB/topics/actuator_motors.h>
+#include <uORB/topics/actuator_saturation_status.h>
 #include <uORB/topics/actuator_servos.h>
 #include <uORB/topics/airspeed.h>
 #include <uORB/topics/battery_status.h>
 #include <uORB/topics/control_allocator_status.h>
+#include <uORB/topics/multirotor_motor_limits.h>
 #include <uORB/topics/parameter_update.h>
 #include <uORB/topics/vehicle_torque_setpoint.h>
 #include <uORB/topics/vehicle_thrust_setpoint.h>
@@ -110,6 +112,7 @@ private:
 
 	void publish_actuator_setpoint();
 	void publish_control_allocator_status();
+	void publish_actuator_saturation_status();
 
 	void publish_legacy_actuator_controls();
 	void publish_legacy_multirotor_motor_limits();
@@ -143,6 +146,9 @@ private:
 
 	uORB::Publication<actuator_motors_s>	_actuator_motors_pub{ORB_ID(actuator_motors)};
 	uORB::Publication<actuator_servos_s>	_actuator_servos_pub{ORB_ID(actuator_servos)};
+
+	uORB::Publication<multirotor_motor_limits_s> _multirotor_motor_limits_pub{ORB_ID(multirotor_motor_limits)};
+	uORB::Publication<actuator_saturation_status_s> _actuator_saturation_status_pub{ORB_ID(actuator_saturation_status)};
 
 	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
 

@@ -43,6 +43,7 @@ set(msg_files
 	actuator_motors.msg
 	actuator_outputs.msg
 	actuator_servos.msg
+	actuator_saturation_status.msg
 	adc_report.msg
 	airspeed.msg
 	airspeed_validated.msg
