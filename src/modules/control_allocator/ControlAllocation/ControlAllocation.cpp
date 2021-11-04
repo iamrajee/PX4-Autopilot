@@ -68,9 +68,6 @@ ControlAllocation::setActuatorSetpoint(
 	// Clip
 	clipActuatorSetpoint(_actuator_sp);
 
-	// Compute achieved control
-	_control_allocated = _effectiveness * _actuator_sp;
-
 	updateSaturationStatus();
 }
 
@@ -93,6 +90,9 @@ ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation:
 void
 ControlAllocation::updateSaturationStatus()
 {
+	// Compute achieved control
+	_control_allocated = (_effectiveness * _actuator_sp).emult(_control_allocation_scale);
+
 	const float tolerance = FLT_EPSILON;
 
 	_saturation_status.flags.valid = true;

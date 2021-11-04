@@ -75,7 +75,7 @@
 class ControlAllocation
 {
 public:
-	ControlAllocation() = default;
+	ControlAllocation() { _control_allocation_scale.setAll(1.f); }
 	virtual ~ControlAllocation() = default;
 
 	static constexpr uint8_t NUM_ACTUATORS = 16;
@@ -247,6 +247,7 @@ public:
 
 protected:
 	matrix::Matrix<float, NUM_AXES, NUM_ACTUATORS> _effectiveness;  //< Effectiveness matrix
+	matrix::Vector<float, NUM_AXES> _control_allocation_scale;  	//< Scaling applied during allocation
 	matrix::Vector<float, NUM_ACTUATORS> _actuator_trim; 	//< Neutral actuator values
 	matrix::Vector<float, NUM_ACTUATORS> _actuator_min; 	//< Minimum actuator values
 	matrix::Vector<float, NUM_ACTUATORS> _actuator_max; 	//< Maximum actuator values
