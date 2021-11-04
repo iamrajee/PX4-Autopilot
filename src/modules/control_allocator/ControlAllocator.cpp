@@ -337,13 +337,12 @@ ControlAllocator::Run()
 		// Publish actuator setpoint and allocator status
 		publish_actuator_setpoint();
 		publish_control_allocator_status();
-		publish_actuator_saturation_status();
+		publish_actuator_controls_saturation();
 
 		// Publish on legacy topics for compatibility with
 		// the current mixer system and multicopter controller
 		// TODO: remove
 		publish_legacy_actuator_controls();
-		publish_legacy_multirotor_motor_limits();
 	}
 
 	perf_end(_loop_perf);
@@ -455,26 +454,13 @@ ControlAllocator::publish_legacy_actuator_controls()
 	// TODO: servos
 }
 
-void ControlAllocator::publish_legacy_multirotor_motor_limits()
+void ControlAllocator::publish_actuator_controls_saturation()
 {
-	multirotor_motor_limits_s sat{};
+	actuator_controls_saturation_s sat{};
 
 	sat.timestamp = hrt_absolute_time();
-	uint16_t bitmask = _control_allocation->getSaturationStatus().value;
-	// Adjust new to legacy bitmask (remove thrust X and Y)
-	sat.saturation_status = (bitmask & 0x1FF) | ((bitmask & 0x6000) << 4);
-
-	_multirotor_motor_limits_pub.publish(sat);
-}
-
-void ControlAllocator::publish_actuator_saturation_status()
-{
-	actuator_saturation_status_s sat{};
-
-	sat.timestamp = hrt_absolute_time();
+	sat.bitmask = _control_allocation->getSaturationStatus().value;
 	sat.valid = _control_allocation->getSaturationStatusFlags().valid;
-	sat.act_pos = _control_allocation->getSaturationStatusFlags().act_pos;
-	sat.act_neg = _control_allocation->getSaturationStatusFlags().act_neg;
 	sat.roll_pos = _control_allocation->getSaturationStatusFlags().roll_pos;
 	sat.roll_neg = _control_allocation->getSaturationStatusFlags().roll_neg;
 	sat.pitch_pos = _control_allocation->getSaturationStatusFlags().pitch_pos;
@@ -488,7 +474,7 @@ void ControlAllocator::publish_actuator_saturation_status()
 	sat.thrust_z_pos = _control_allocation->getSaturationStatusFlags().thrust_z_pos;
 	sat.thrust_z_neg = _control_allocation->getSaturationStatusFlags().thrust_z_neg;
 
-	_actuator_saturation_status_pub.publish(sat);
+	_actuator_controls_saturation_pub.publish(sat);
 }
 
 int ControlAllocator::task_spawn(int argc, char *argv[])

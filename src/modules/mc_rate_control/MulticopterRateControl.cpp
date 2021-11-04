@@ -207,12 +207,12 @@ MulticopterRateControl::Run()
 			}
 
 			// update saturation status from mixer feedback
-			if (_motor_limits_sub.updated()) {
-				multirotor_motor_limits_s motor_limits;
+			if (_actuator_controls_saturation_sub.updated()) {
+				actuator_controls_saturation_s sat;
 
-				if (_motor_limits_sub.copy(&motor_limits)) {
-					MultirotorMixer::saturation_status saturation_status;
-					saturation_status.value = motor_limits.saturation_status;
+				if (_actuator_controls_saturation_sub.copy(&sat)) {
+					MultirotorMixer::saturation_status_u saturation_status;
+					saturation_status.value = sat.bitmask;
 
 					_rate_control.setSaturationStatus(saturation_status);
 				}

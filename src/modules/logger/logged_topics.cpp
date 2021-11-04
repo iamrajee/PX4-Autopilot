@@ -51,7 +51,6 @@ void LoggedTopics::add_default_topics()
 	add_topic("actuator_controls_2", 100);
 	add_topic("actuator_controls_3", 100);
 	add_topic("actuator_controls_status_0", 300);
-	add_topic("actuator_saturation_status", 300);
 	add_topic("airspeed", 1000);
 	add_topic("airspeed_validated", 200);
 	add_topic("autotune_attitude_control_status", 100);
@@ -117,7 +116,7 @@ void LoggedTopics::add_default_topics()
 	// multi topics
 	add_topic_multi("actuator_outputs", 100, 3);
 	add_topic_multi("airspeed_wind", 1000);
-	add_topic_multi("multirotor_motor_limits", 1000, 2);
+	add_topic_multi("actuator_controls_saturation", 1000, 2);
 	add_topic_multi("rate_ctrl_status", 200, 2);
 	add_topic_multi("telemetry_status", 1000, 4);
 

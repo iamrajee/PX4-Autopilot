@@ -857,15 +857,27 @@ MixingOutput::setAndPublishActuatorOutputs(unsigned num_outputs, actuator_output
 void
 MixingOutput::publishMixerStatus(const actuator_outputs_s &actuator_outputs)
 {
-	MultirotorMixer::saturation_status saturation_status;
+	MultirotorMixer::saturation_status_u saturation_status;
 	saturation_status.value = _mixers->get_saturation_status();
 
 	if (saturation_status.flags.valid) {
-		multirotor_motor_limits_s motor_limits;
-		motor_limits.timestamp = actuator_outputs.timestamp;
-		motor_limits.saturation_status = saturation_status.value;
-
-		_to_mixer_status.publish(motor_limits);
+		actuator_controls_saturation_s sat;
+		sat.timestamp = hrt_absolute_time();
+		sat.bitmask = saturation_status.value;
+		sat.valid = saturation_status.flags.valid;
+		sat.roll_pos = saturation_status.flags.roll_pos;
+		sat.roll_neg = saturation_status.flags.roll_neg;
+		sat.pitch_pos = saturation_status.flags.pitch_pos;
+		sat.pitch_neg = saturation_status.flags.pitch_neg;
+		sat.yaw_pos = saturation_status.flags.yaw_pos;
+		sat.yaw_neg = saturation_status.flags.yaw_neg;
+		sat.thrust_x_pos = saturation_status.flags.thrust_x_pos;
+		sat.thrust_x_neg = saturation_status.flags.thrust_x_neg;
+		sat.thrust_y_pos = saturation_status.flags.thrust_y_pos;
+		sat.thrust_y_neg = saturation_status.flags.thrust_y_neg;
+		sat.thrust_z_pos = saturation_status.flags.thrust_z_pos;
+		sat.thrust_z_neg = saturation_status.flags.thrust_z_neg;
+		_actuator_controls_saturation_pub.publish(sat);
 	}
 }
 

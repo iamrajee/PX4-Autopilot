@@ -109,8 +109,6 @@ float ControlAllocationSequentialDesaturation::computeDesaturationGain(const Act
 			if (k < k_min) { k_min = k; }
 
 			if (k > k_max) { k_max = k; }
-
-			_saturation_status.flags.act_neg = true;
 		}
 
 		if (actuator_sp(i) > _actuator_max(i)) {
@@ -119,8 +117,6 @@ float ControlAllocationSequentialDesaturation::computeDesaturationGain(const Act
 			if (k < k_min) { k_min = k; }
 
 			if (k > k_max) { k_max = k; }
-
-			_saturation_status.flags.act_pos = true;
 		}
 	}
 

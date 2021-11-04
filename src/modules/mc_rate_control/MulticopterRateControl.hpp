@@ -47,11 +47,11 @@
 #include <uORB/Subscription.hpp>
 #include <uORB/SubscriptionCallback.hpp>
 #include <uORB/topics/actuator_controls.h>
+#include <uORB/topics/actuator_controls_saturation.h>
 #include <uORB/topics/actuator_controls_status.h>
 #include <uORB/topics/battery_status.h>
 #include <uORB/topics/landing_gear.h>
 #include <uORB/topics/manual_control_setpoint.h>
-#include <uORB/topics/multirotor_motor_limits.h>
 #include <uORB/topics/parameter_update.h>
 #include <uORB/topics/rate_ctrl_status.h>
 #include <uORB/topics/vehicle_angular_acceleration.h>
@@ -100,7 +100,7 @@ private:
 	uORB::Subscription _battery_status_sub{ORB_ID(battery_status)};
 	uORB::Subscription _landing_gear_sub{ORB_ID(landing_gear)};
 	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};
-	uORB::Subscription _motor_limits_sub{ORB_ID(multirotor_motor_limits)};
+	uORB::Subscription _actuator_controls_saturation_sub{ORB_ID(actuator_controls_saturation)};
 	uORB::Subscription _v_control_mode_sub{ORB_ID(vehicle_control_mode)};
 	uORB::Subscription _v_rates_sp_sub{ORB_ID(vehicle_rates_setpoint)};
 	uORB::Subscription _vehicle_angular_acceleration_sub{ORB_ID(vehicle_angular_acceleration)};

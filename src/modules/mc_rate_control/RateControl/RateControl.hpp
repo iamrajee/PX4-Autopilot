@@ -75,7 +75,7 @@ public:
 	 * Set saturation status
 	 * @param status message from mixer reporting about saturation
 	 */
-	void setSaturationStatus(const MultirotorMixer::saturation_status &status);
+	void setSaturationStatus(const MultirotorMixer::saturation_status_u &status);
 
 	/**
 	 * Run one control loop cycle calculation

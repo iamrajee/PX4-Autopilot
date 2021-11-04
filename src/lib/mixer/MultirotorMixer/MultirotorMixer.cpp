@@ -148,7 +148,7 @@ MultirotorMixer::from_text(Mixer::ControlCallback control_cb, uintptr_t cb_handl
 
 float
 MultirotorMixer::compute_desaturation_gain(const float *desaturation_vector, const float *outputs,
-		saturation_status &sat_status, float min_output, float max_output) const
+		saturation_status_u &sat_status, float min_output, float max_output) const
 {
 	float k_min = 0.f;
 	float k_max = 0.f;
@@ -165,8 +165,6 @@ MultirotorMixer::compute_desaturation_gain(const float *desaturation_vector, con
 			if (k < k_min) { k_min = k; }
 
 			if (k > k_max) { k_max = k; }
-
-			sat_status.flags.motor_neg = true;
 		}
 
 		if (outputs[i] > max_output) {
@@ -175,8 +173,6 @@ MultirotorMixer::compute_desaturation_gain(const float *desaturation_vector, con
 			if (k < k_min) { k_min = k; }
 
 			if (k > k_max) { k_max = k; }
-
-			sat_status.flags.motor_pos = true;
 		}
 	}
 
@@ -186,7 +182,7 @@ MultirotorMixer::compute_desaturation_gain(const float *desaturation_vector, con
 
 void
 MultirotorMixer::minimize_saturation(const float *desaturation_vector, float *outputs,
-				     saturation_status &sat_status, float min_output, float max_output, bool reduce_only) const
+				     saturation_status_u &sat_status, float min_output, float max_output, bool reduce_only) const
 {
 	float k1 = compute_desaturation_gain(desaturation_vector, outputs, sat_status, min_output, max_output);
 
@@ -451,8 +447,8 @@ MultirotorMixer::update_saturation_status(unsigned index, bool clipping_high, bo
 			_saturation_status.flags.yaw_neg = true;
 		}
 
-		// A positive change in thrust will increase saturation
-		_saturation_status.flags.thrust_pos = true;
+		// A positive change in thrust will increase saturation (Z neg is up)
+		_saturation_status.flags.thrust_z_neg = true;
 	}
 
 	// The motor is saturated at the lower limit
@@ -478,8 +474,8 @@ MultirotorMixer::update_saturation_status(unsigned index, bool clipping_high, bo
 			_saturation_status.flags.pitch_pos = true;
 		}
 
-		// A negative change in thrust will increase saturation
-		_saturation_status.flags.thrust_neg = true;
+		// A negative change in thrust will increase saturation (Z pos is down)
+		_saturation_status.flags.thrust_z_pos = true;
 	}
 
 	if (clipping_low_yaw) {

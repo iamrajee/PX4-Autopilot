@@ -39,11 +39,11 @@ include(px4_list_make_absolute)
 set(msg_files
 	actuator_armed.msg
 	actuator_controls.msg
+	actuator_controls_saturation.msg
 	actuator_controls_status.msg
 	actuator_motors.msg
 	actuator_outputs.msg
 	actuator_servos.msg
-	actuator_saturation_status.msg
 	adc_report.msg
 	airspeed.msg
 	airspeed_validated.msg
@@ -108,7 +108,6 @@ set(msg_files
 	mission.msg
 	mission_result.msg
 	mount_orientation.msg
-	multirotor_motor_limits.msg
 	navigator_mission_item.msg
 	obstacle_distance.msg
 	offboard_control_mode.msg

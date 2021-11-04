@@ -149,19 +149,21 @@ public:
 
 	unsigned		get_multirotor_count() override { return _rotor_count; }
 
-	union saturation_status {
+	union saturation_status_u {
 		struct {
 			uint16_t valid		: 1; // 0 - true when the saturation status is used
-			uint16_t motor_pos	: 1; // 1 - true when any motor has saturated in the positive direction
-			uint16_t motor_neg	: 1; // 2 - true when any motor has saturated in the negative direction
-			uint16_t roll_pos	: 1; // 3 - true when a positive roll demand change will increase saturation
-			uint16_t roll_neg	: 1; // 4 - true when a negative roll demand change will increase saturation
-			uint16_t pitch_pos	: 1; // 5 - true when a positive pitch demand change will increase saturation
-			uint16_t pitch_neg	: 1; // 6 - true when a negative pitch demand change will increase saturation
-			uint16_t yaw_pos	: 1; // 7 - true when a positive yaw demand change will increase saturation
-			uint16_t yaw_neg	: 1; // 8 - true when a negative yaw demand change will increase saturation
-			uint16_t thrust_pos	: 1; // 9 - true when a positive thrust demand change will increase saturation
-			uint16_t thrust_neg	: 1; //10 - true when a negative thrust demand change will increase saturation
+			uint16_t roll_pos	: 1; // 1 - true when a positive roll demand change will increase saturation
+			uint16_t roll_neg	: 1; // 2 - true when a negative roll demand change will increase saturation
+			uint16_t pitch_pos	: 1; // 3 - true when a positive pitch demand change will increase saturation
+			uint16_t pitch_neg	: 1; // 4 - true when a negative pitch demand change will increase saturation
+			uint16_t yaw_pos	: 1; // 5 - true when a positive yaw demand change will increase saturation
+			uint16_t yaw_neg	: 1; // 6 - true when a negative yaw demand change will increase saturation
+			uint16_t thrust_x_pos	: 1; // 7 - true when a forward thrust demand change will increase saturation
+			uint16_t thrust_x_neg	: 1; // 8 - true when a backward thrust demand change will increase saturation
+			uint16_t thrust_y_pos	: 1; // 9 - true when a right thrust demand change will increase saturation
+			uint16_t thrust_y_neg	: 1; //10 - true when a left thrust demand change will increase saturation
+			uint16_t thrust_z_pos	: 1; //11 - true when a downward thrust demand change will increase saturation
+			uint16_t thrust_z_neg	: 1; //12 - true when a upward thrust demand change will increase saturation
 		} flags;
 		uint16_t value;
 	};
@@ -174,7 +176,7 @@ private:
 	 *
 	 * @return desaturation gain
 	 */
-	float compute_desaturation_gain(const float *desaturation_vector, const float *outputs, saturation_status &sat_status,
+	float compute_desaturation_gain(const float *desaturation_vector, const float *outputs, saturation_status_u &sat_status,
 					float min_output, float max_output) const;
 
 	/**
@@ -195,7 +197,7 @@ private:
 	 * @param max_output maximum desired value in outputs
 	 * @param reduce_only if true, only allow to reduce (substract) a fraction of desaturation_vector
 	 */
-	void minimize_saturation(const float *desaturation_vector, float *outputs, saturation_status &sat_status,
+	void minimize_saturation(const float *desaturation_vector, float *outputs, saturation_status_u &sat_status,
 				 float min_output = 0.f, float max_output = 1.f, bool reduce_only = false) const;
 
 	/**
@@ -245,7 +247,7 @@ private:
 
 	Airmode				_airmode{Airmode::disabled};
 
-	saturation_status		_saturation_status{};
+	saturation_status_u		_saturation_status{};
 
 	unsigned			_rotor_count;
 	const Rotor			*_rotors;

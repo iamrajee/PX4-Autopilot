@@ -75,7 +75,7 @@ ControlAllocation::setActuatorSetpoint(
 }
 
 void
-ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation::NUM_ACTUATORS> &actuator)
+ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation::NUM_ACTUATORS> &actuator) const
 {
 	for (int i = 0; i < _num_actuators; i++) {
 		if (_actuator_max(i) < _actuator_min(i)) {
@@ -83,11 +83,9 @@ ControlAllocation::clipActuatorSetpoint(matrix::Vector<float, ControlAllocation:
 
 		} else if (actuator(i) < _actuator_min(i)) {
 			actuator(i) = _actuator_min(i);
-			_saturation_status.flags.act_neg = true;
 
 		} else if (actuator(i) > _actuator_max(i)) {
 			actuator(i) = _actuator_max(i);
-			_saturation_status.flags.act_pos = true;
 		}
 	}
 }

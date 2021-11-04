@@ -47,7 +47,7 @@ void RateControl::setGains(const Vector3f &P, const Vector3f &I, const Vector3f 
 	_gain_d = D;
 }
 
-void RateControl::setSaturationStatus(const MultirotorMixer::saturation_status &status)
+void RateControl::setSaturationStatus(const MultirotorMixer::saturation_status_u &status)
 {
 	_mixer_saturation_positive[0] = status.flags.roll_pos;
 	_mixer_saturation_positive[1] = status.flags.pitch_pos;

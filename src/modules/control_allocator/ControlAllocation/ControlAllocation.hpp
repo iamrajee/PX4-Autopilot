@@ -95,20 +95,18 @@ public:
 	union saturation_status_u {
 		struct {
 			uint16_t valid		: 1; // 0 - true when the saturation status is used
-			uint16_t act_pos	: 1; // 1 - true when any actuator has saturated in the positive direction
-			uint16_t act_neg	: 1; // 2 - true when any actuator has saturated in the negative direction
-			uint16_t roll_pos	: 1; // 3 - true when a positive roll demand change will increase saturation
-			uint16_t roll_neg	: 1; // 4 - true when a negative roll demand change will increase saturation
-			uint16_t pitch_pos	: 1; // 5 - true when a positive pitch demand change will increase saturation
-			uint16_t pitch_neg	: 1; // 6 - true when a negative pitch demand change will increase saturation
-			uint16_t yaw_pos	: 1; // 7 - true when a positive yaw demand change will increase saturation
-			uint16_t yaw_neg	: 1; // 8 - true when a negative yaw demand change will increase saturation
-			uint16_t thrust_x_pos	: 1; // 9 - true when a forward thrust demand change will increase saturation
-			uint16_t thrust_x_neg	: 1; //10 - true when a backward thrust demand change will increase saturation
-			uint16_t thrust_y_pos	: 1; //11 - true when a right thrust demand change will increase saturation
-			uint16_t thrust_y_neg	: 1; //12 - true when a left thrust demand change will increase saturation
-			uint16_t thrust_z_pos	: 1; //13 - true when a downward thrust demand change will increase saturation
-			uint16_t thrust_z_neg	: 1; //14 - true when a upward thrust demand change will increase saturation
+			uint16_t roll_pos	: 1; // 1 - true when a positive roll demand change will increase saturation
+			uint16_t roll_neg	: 1; // 2 - true when a negative roll demand change will increase saturation
+			uint16_t pitch_pos	: 1; // 3 - true when a positive pitch demand change will increase saturation
+			uint16_t pitch_neg	: 1; // 4 - true when a negative pitch demand change will increase saturation
+			uint16_t yaw_pos	: 1; // 5 - true when a positive yaw demand change will increase saturation
+			uint16_t yaw_neg	: 1; // 6 - true when a negative yaw demand change will increase saturation
+			uint16_t thrust_x_pos	: 1; // 7 - true when a forward thrust demand change will increase saturation
+			uint16_t thrust_x_neg	: 1; // 8 - true when a backward thrust demand change will increase saturation
+			uint16_t thrust_y_pos	: 1; // 9 - true when a right thrust demand change will increase saturation
+			uint16_t thrust_y_neg	: 1; //10 - true when a left thrust demand change will increase saturation
+			uint16_t thrust_z_pos	: 1; //11 - true when a downward thrust demand change will increase saturation
+			uint16_t thrust_z_neg	: 1; //12 - true when a upward thrust demand change will increase saturation
 		} flags;
 		uint16_t value;
 	};
@@ -223,7 +221,7 @@ public:
 	 *
 	 * @param actuator Actuator vector to clip
 	 */
-	void clipActuatorSetpoint(matrix::Vector<float, NUM_ACTUATORS> &actuator);
+	void clipActuatorSetpoint(matrix::Vector<float, NUM_ACTUATORS> &actuator) const;
 
 	/**
 	 * Set the saturation status flags given the desired
