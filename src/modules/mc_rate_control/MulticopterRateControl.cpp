@@ -211,10 +211,7 @@ MulticopterRateControl::Run()
 				actuator_controls_saturation_s sat;
 
 				if (_actuator_controls_saturation_sub.copy(&sat)) {
-					MultirotorMixer::saturation_status_u saturation_status;
-					saturation_status.value = sat.bitmask;
-
-					_rate_control.setSaturationStatus(saturation_status);
+					_rate_control.setSaturationLevel(Vector3f(sat.torque_saturation));
 				}
 			}
 

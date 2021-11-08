@@ -863,20 +863,20 @@ MixingOutput::publishMixerStatus(const actuator_outputs_s &actuator_outputs)
 	if (saturation_status.flags.valid) {
 		actuator_controls_saturation_s sat;
 		sat.timestamp = hrt_absolute_time();
-		sat.bitmask = saturation_status.value;
-		sat.valid = saturation_status.flags.valid;
-		sat.roll_pos = saturation_status.flags.roll_pos;
-		sat.roll_neg = saturation_status.flags.roll_neg;
-		sat.pitch_pos = saturation_status.flags.pitch_pos;
-		sat.pitch_neg = saturation_status.flags.pitch_neg;
-		sat.yaw_pos = saturation_status.flags.yaw_pos;
-		sat.yaw_neg = saturation_status.flags.yaw_neg;
-		sat.thrust_x_pos = saturation_status.flags.thrust_x_pos;
-		sat.thrust_x_neg = saturation_status.flags.thrust_x_neg;
-		sat.thrust_y_pos = saturation_status.flags.thrust_y_pos;
-		sat.thrust_y_neg = saturation_status.flags.thrust_y_neg;
-		sat.thrust_z_pos = saturation_status.flags.thrust_z_pos;
-		sat.thrust_z_neg = saturation_status.flags.thrust_z_neg;
+
+		sat.torque_saturation[0] = saturation_status.flags.roll_pos ? 1.f : 0.f;
+		sat.torque_saturation[0] = saturation_status.flags.roll_neg ? -1.f : 0.f;
+		sat.torque_saturation[1] = saturation_status.flags.pitch_pos ? 1.f : 0.f;
+		sat.torque_saturation[1] = saturation_status.flags.pitch_neg ? -1.f : 0.f;
+		sat.torque_saturation[2] = saturation_status.flags.yaw_pos ? 1.f : 0.f;
+		sat.torque_saturation[2] = saturation_status.flags.yaw_neg ? -1.f : 0.f;
+
+		sat.thrust_saturation[0] = saturation_status.flags.thrust_x_pos ? 1.f : 0.f;
+		sat.thrust_saturation[0] = saturation_status.flags.thrust_x_neg ? -1.f : 0.f;
+		sat.thrust_saturation[1] = saturation_status.flags.thrust_y_pos ? 1.f : 0.f;
+		sat.thrust_saturation[1] = saturation_status.flags.thrust_y_neg ? -1.f : 0.f;
+		sat.thrust_saturation[2] = saturation_status.flags.thrust_z_pos ? 1.f : 0.f;
+		sat.thrust_saturation[2] = saturation_status.flags.thrust_z_neg ? -1.f : 0.f;
 		_actuator_controls_saturation_pub.publish(sat);
 	}
 }

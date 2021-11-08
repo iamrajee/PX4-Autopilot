@@ -92,25 +92,6 @@ public:
 		THRUST_Z
 	};
 
-	union saturation_status_u {
-		struct {
-			uint16_t valid		: 1; // 0 - true when the saturation status is used
-			uint16_t roll_pos	: 1; // 1 - true when a positive roll demand change will increase saturation
-			uint16_t roll_neg	: 1; // 2 - true when a negative roll demand change will increase saturation
-			uint16_t pitch_pos	: 1; // 3 - true when a positive pitch demand change will increase saturation
-			uint16_t pitch_neg	: 1; // 4 - true when a negative pitch demand change will increase saturation
-			uint16_t yaw_pos	: 1; // 5 - true when a positive yaw demand change will increase saturation
-			uint16_t yaw_neg	: 1; // 6 - true when a negative yaw demand change will increase saturation
-			uint16_t thrust_x_pos	: 1; // 7 - true when a forward thrust demand change will increase saturation
-			uint16_t thrust_x_neg	: 1; // 8 - true when a backward thrust demand change will increase saturation
-			uint16_t thrust_y_pos	: 1; // 9 - true when a right thrust demand change will increase saturation
-			uint16_t thrust_y_neg	: 1; //10 - true when a left thrust demand change will increase saturation
-			uint16_t thrust_z_pos	: 1; //11 - true when a downward thrust demand change will increase saturation
-			uint16_t thrust_z_neg	: 1; //12 - true when a upward thrust demand change will increase saturation
-		} flags;
-		uint16_t value;
-	};
-
 	/**
 	 * Allocate control setpoint to actuators
 	 *
@@ -190,18 +171,13 @@ public:
 	const matrix::Vector<float, NUM_ACTUATORS> &getActuatorMax() const { return _actuator_max; }
 
 	/**
-	 * Get the saturation status union
+	 * Get the level of saturation of each axis
+	 * The level of saturation is the difference between the desired and allocated
+	 * control torque and thrust vectors
 	 *
-	 * @return saturation_status union
+	 * @return saturation vector
 	 */
-	const saturation_status_u &getSaturationStatus() const { return _saturation_status; }
-
-	/**
-	 * Get the saturation status flags
-	 *
-	 * @return saturation_status flags (bitmask)
-	 */
-	const decltype(saturation_status_u::flags) &getSaturationStatusFlags() const { return _saturation_status.flags; }
+	const matrix::Vector<float, NUM_AXES> &getSaturationLevel() const { return _control_saturation_level; }
 
 	/**
 	 * Set the current actuator setpoint.
@@ -224,7 +200,7 @@ public:
 	void clipActuatorSetpoint(matrix::Vector<float, NUM_ACTUATORS> &actuator) const;
 
 	/**
-	 * Set the saturation status flags given the desired
+	 * Compute the difference between the desired
 	 * and allocated torques and forces.
 	 */
 	void updateSaturationStatus();
@@ -254,8 +230,8 @@ protected:
 	matrix::Vector<float, NUM_ACTUATORS> _actuator_sp;  	//< Actuator setpoint
 	matrix::Vector<float, NUM_AXES> _control_sp;   		//< Control setpoint
 	matrix::Vector<float, NUM_AXES> _control_allocated;  	//< Allocated control
+	matrix::Vector<float, NUM_AXES>
+	_control_saturation_level; //< Difference between desired and allocated control amplitude
 	matrix::Vector<float, NUM_AXES> _control_trim;  	//< Control at trim actuator values
 	int _num_actuators{0};
-
-	saturation_status_u _saturation_status{};
 };

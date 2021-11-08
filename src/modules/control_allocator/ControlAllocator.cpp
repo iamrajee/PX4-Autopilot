@@ -459,20 +459,12 @@ void ControlAllocator::publish_actuator_controls_saturation()
 	actuator_controls_saturation_s sat{};
 
 	sat.timestamp = hrt_absolute_time();
-	sat.bitmask = _control_allocation->getSaturationStatus().value;
-	sat.valid = _control_allocation->getSaturationStatusFlags().valid;
-	sat.roll_pos = _control_allocation->getSaturationStatusFlags().roll_pos;
-	sat.roll_neg = _control_allocation->getSaturationStatusFlags().roll_neg;
-	sat.pitch_pos = _control_allocation->getSaturationStatusFlags().pitch_pos;
-	sat.pitch_neg = _control_allocation->getSaturationStatusFlags().pitch_neg;
-	sat.yaw_pos = _control_allocation->getSaturationStatusFlags().yaw_pos;
-	sat.yaw_neg = _control_allocation->getSaturationStatusFlags().yaw_neg;
-	sat.thrust_x_pos = _control_allocation->getSaturationStatusFlags().thrust_x_pos;
-	sat.thrust_x_neg = _control_allocation->getSaturationStatusFlags().thrust_x_neg;
-	sat.thrust_y_pos = _control_allocation->getSaturationStatusFlags().thrust_y_pos;
-	sat.thrust_y_neg = _control_allocation->getSaturationStatusFlags().thrust_y_neg;
-	sat.thrust_z_pos = _control_allocation->getSaturationStatusFlags().thrust_z_pos;
-	sat.thrust_z_neg = _control_allocation->getSaturationStatusFlags().thrust_z_neg;
+	const Vector<float, NUM_AXES> &saturation_level = _control_allocation->getSaturationLevel();
+
+	for (int i = 0; i < 3; i++) {
+		sat.torque_saturation[i] = saturation_level(i);
+		sat.thrust_saturation[i] = saturation_level(i + 3);
+	}
 
 	_actuator_controls_saturation_pub.publish(sat);
 }
